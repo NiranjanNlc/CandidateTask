@@ -43,28 +43,9 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             CandidateTaskTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    ItemListScreen(items = listOf(), onItemClick = { /* Handle item click */ }) {
-                        Modifier.padding(innerPadding)
-                    }
-                }
+                ItemListScreen()
             }
         }
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    CandidateTaskTheme {
-        Greeting("Android")
-    }
-}

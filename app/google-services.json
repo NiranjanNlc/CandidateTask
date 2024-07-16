@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "131644174654",
+    "project_id": "candidatetask-123",
+    "storage_bucket": "candidatetask-123.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:131644174654:android:deb72bd9d3dc58ad5b7c6f",
+        "android_client_info": {
+          "package_name": "org.nlc.candidatetask"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDeSrUT9Li1bw8bfkzMc_ao3dKgTdCcAi8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

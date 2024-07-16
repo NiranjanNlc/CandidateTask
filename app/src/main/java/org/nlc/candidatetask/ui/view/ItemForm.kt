@@ -13,14 +13,15 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import org.nlc.candidatetask.data.Item
+import org.nlc.candidatetask.data.Book
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ItemForm(
-    item: Item,
-    onSave: (Item) -> Unit
+    book: Book,
+    onSave: (Book) -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -35,29 +36,43 @@ fun ItemForm(
                 .padding(16.dp)
         ) {
             TextField(
-                value = item.title,
-                onValueChange = { item.copy(title = it) },
+                value = book.title,
+                onValueChange = { book.copy(title = it) },
                 label = { Text("Title") }
             )
             Spacer(modifier = Modifier.height(8.dp))
             TextField(
-                value = item.description ?: "",
-                onValueChange = { item.copy(description = it) },
+                value = book.description ?: "",
+                onValueChange = { book.copy(description = it) },
                 label = { Text("Description") }
             )
             Spacer(modifier = Modifier.height(8.dp))
             TextField(
-                value = item.imageUrl ?: "",
-                onValueChange = { item.copy(imageUrl = it) },
+                value = book.imageUrl ?: "",
+                onValueChange = { book.copy(imageUrl = it) },
                 label = { Text("Image URL") }
             )
             Spacer(modifier = Modifier.height(16.dp))
             Button(
-                onClick = { onSave(item) },
+                onClick = { onSave(book) },
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text("Save")
             }
         }
     }
+}
+
+@Preview
+@Composable
+fun ItemFormPreview() {
+    ItemForm(
+        book = Book(
+            title = "Sample Title",
+            description = "Sample Description",
+            imageUrl = "https://example.com/image.jpg"
+        ),
+        onSave = {}
+    )
+
 }

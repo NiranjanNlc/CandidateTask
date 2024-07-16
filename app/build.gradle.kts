@@ -1,6 +1,9 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.google.gms.google.services)
+    id("com.google.dagger.hilt.android")
+    id("kotlin-kapt")
 }
 
 android {
@@ -47,6 +50,10 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    testOptions {
+        unitTests.isIncludeAndroidResources = true
+
+    }
 }
 
 dependencies {
@@ -63,7 +70,27 @@ dependencies {
     implementation(libs.androidx.room.common)
     implementation(libs.firebase.database.ktx)
     implementation(libs.androidx.work.runtime.ktx)
+    //firebase
+    implementation(libs.firebase.storage)
+    implementation(libs.firebase.database)
+    implementation(libs.firebase.firestore)
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1")
+    testImplementation(libs.mockito.kotlin)
+    testImplementation(libs.mockito.inline)
     testImplementation(libs.junit)
+// power mockito to test firebase 
+    testImplementation(libs.powermock)
+    testImplementation(libs.powermock.module.junit4)
+    testImplementation(libs.powermock.api.mockito)
+
+    implementation("com.google.dagger:hilt-android:2.51.1")
+    kapt("com.google.dagger:hilt-android-compiler:2.51.1")
+    implementation ("androidx.navigation:navigation-compose:2.4.0-alpha09")
+    implementation ("androidx.hilt:hilt-navigation-compose:1.0.0-alpha03")
+
+    implementation(libs.androidx.hilt.lifecycle.viewmodel)
+    kapt(libs.androidx.hilt.compiler)
+
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))

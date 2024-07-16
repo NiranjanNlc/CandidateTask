@@ -7,10 +7,12 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import dagger.hilt.android.HiltAndroidApp
 import org.nlc.candidatetask.sync.ItemSyncWorker
 import org.nlc.candidatetask.sync.NetworkMonitor
 import java.util.concurrent.TimeUnit
 
+@HiltAndroidApp
 class MyApplication : Application() {
     private val networkMonitor by lazy {
         NetworkMonitor(getSystemService(ConnectivityManager::class.java))

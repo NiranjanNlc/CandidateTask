@@ -11,19 +11,19 @@ import androidx.room.Update
 @Dao
 interface ItemDao {
     @Insert
-    suspend fun insert(item: Item)
+    suspend fun insert(book: Book)
 
     @Update
-    suspend fun update(item: Item)
+    suspend fun update(book: Book)
 
     @Delete
-    suspend fun delete(item: Item)
+    suspend fun delete(book: Book)
 
-    @Query("SELECT * FROM items")
-    fun getAllItems(): List<Item>
+    @Query("SELECT * FROM books")
+    fun getAllItems(): List<Book>
 }
 
-@Database(entities = [Item::class], version = 1)
+@Database(entities = [Book::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun itemDao(): ItemDao
 }
