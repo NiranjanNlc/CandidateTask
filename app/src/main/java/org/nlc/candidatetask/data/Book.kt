@@ -9,5 +9,8 @@ data class Book(
     var bookId: String= " ",
     val title: String= " ",
     val author: String=" ",
-    val imageUrl: String?=" "
+    val imageUrl: String?=" ",
+    var isSynchronized: Boolean = false,
+    val lastModified: Long = System.currentTimeMillis(),
+    val isDeleted : Boolean = false
 )

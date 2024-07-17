@@ -3,6 +3,7 @@ package org.nlc.candidatetask.di
 import android.content.Context
 import androidx.room.Room
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.firestore.remote.ConnectivityMonitor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -12,6 +13,7 @@ import org.nlc.candidatetask.repository.BookRepository
 import org.nlc.candidatetask.data.AppDatabase
 import org.nlc.candidatetask.data.FirebaseDataSource
 import org.nlc.candidatetask.data.ItemDao
+import org.nlc.candidatetask.sync.NetworkStatusHelper
 import org.nlc.candidatetask.ui.viewmodel.BookViewModel
 import javax.inject.Singleton
 
@@ -46,7 +48,13 @@ object AppModule {
     fun provideItemRepository(itemDao: ItemDao, firebaseDataSource: FirebaseDataSource)
             : BookRepository = BookRepository(itemDao, firebaseDataSource)
 
+    //provides for network status
     @Singleton
     @Provides
-    fun provideBookViewModel(repository: BookRepository): BookViewModel = BookViewModel(repository)
+    fun provideNetworkStatus(@ApplicationContext context: Context): NetworkStatusHelper =
+        NetworkStatusHelper(context)
+
+    @Singleton
+    @Provides
+    fun provideBookViewModel(repository: BookRepository,networkStatusHelper: NetworkStatusHelper): BookViewModel = BookViewModel(repository, networkStatusHelper)
 }

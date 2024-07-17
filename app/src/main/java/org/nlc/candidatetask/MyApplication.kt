@@ -1,50 +1,28 @@
 package org.nlc.candidatetask
 
 import android.app.Application
-import android.net.ConnectivityManager
-import androidx.work.Constraints
-import androidx.work.ExistingPeriodicWorkPolicy
-import androidx.work.NetworkType
-import androidx.work.PeriodicWorkRequestBuilder
-import androidx.work.WorkManager
+import androidx.hilt.work.HiltWorkerFactory
+import androidx.work.Configuration
+import dagger.hilt.EntryPoint
+import dagger.hilt.EntryPoints
+import dagger.hilt.InstallIn
 import dagger.hilt.android.HiltAndroidApp
-import org.nlc.candidatetask.sync.ItemSyncWorker
-import org.nlc.candidatetask.sync.NetworkMonitor
-import java.util.concurrent.TimeUnit
+import dagger.hilt.components.SingletonComponent
+import javax.inject.Inject
 
 @HiltAndroidApp
-class MyApplication : Application() {
-    private val networkMonitor by lazy {
-        NetworkMonitor(getSystemService(ConnectivityManager::class.java))
-    }
-    private val workManager by lazy { WorkManager.getInstance(this) }
+class MyApplication() : Application(), Configuration.Provider {
 
-    private val itemSyncWorker by lazy {
+    @EntryPoint
+    @InstallIn(SingletonComponent::class)
+    interface HiltWorkerFactoryEntryPoint {
+        fun workerFactory(): HiltWorkerFactory
     }
 
-    override fun onCreate() {
-        super.onCreate()
-        networkMonitor.start()
-        setupPeriodicSync()
-    }
-    private fun setupPeriodicSync() {
-            val periodicSyncRequest = PeriodicWorkRequestBuilder<ItemSyncWorker>(12, TimeUnit.HOURS)
-                .setConstraints(
-                    Constraints.Builder()
-                        .setRequiredNetworkType(NetworkType.CONNECTED)
-                        .build()
-                )
-                .build()
-
-            workManager.enqueueUniquePeriodicWork(
-                "item_sync",
-                ExistingPeriodicWorkPolicy.KEEP,
-                periodicSyncRequest
+    override val workManagerConfiguration: Configuration =
+        Configuration.Builder()
+            .setWorkerFactory(
+                EntryPoints.get(this, HiltWorkerFactoryEntryPoint::class.java).workerFactory()
             )
-        }
-
-    override fun onTerminate() {
-        super.onTerminate()
-        networkMonitor.stop()
-    }
+            .build()
 }

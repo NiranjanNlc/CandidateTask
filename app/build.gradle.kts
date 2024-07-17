@@ -70,6 +70,7 @@ dependencies {
     implementation(libs.androidx.room.common)
     // make room work with hilt
     implementation ("android.arch.persistence.room:runtime:1.1.1")
+    implementation(libs.androidx.hilt.work)
     kapt ("android.arch.persistence.room:compiler:1.1.1")
 
     implementation(libs.firebase.database.ktx)

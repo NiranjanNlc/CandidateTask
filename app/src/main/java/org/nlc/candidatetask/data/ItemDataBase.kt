@@ -21,6 +21,12 @@ interface ItemDao {
 
     @Query("SELECT * FROM books")
     fun getAllItems(): List<Book>
+
+    @Query("SELECT * FROM books WHERE isDeleted = 0")
+    fun getNonDeletedItemBy(): List<Book>
+
+    @Query("SELECT * FROM books WHERE id = :id")
+    fun getItemById(id: Int): Book
 }
 
 @Database(entities = [Book::class], version = 1)

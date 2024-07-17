@@ -1,7 +1,6 @@
 package org.nlc.candidatetask.ui.viewmodel
 
 import android.util.Log
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -13,12 +12,17 @@ import org.nlc.candidatetask.data.Book
 import org.nlc.candidatetask.repository.BookRepository
 import org.nlc.candidatetask.util.BookUiState
 import javax.inject.Inject
+import androidx.lifecycle.ViewModel
+import org.nlc.candidatetask.sync.NetworkStatusHelper
 
 
 @HiltViewModel
 class BookViewModel @Inject constructor(
-    private val repository: BookRepository
+    private val repository: BookRepository,
+    private val networkStatusHelper: NetworkStatusHelper
 ) : ViewModel() {
+
+    val networkStatus = networkStatusHelper.networkStatus
 
     private val _bookUiState = MutableStateFlow<BookUiState>(BookUiState.Loading)
     val bookUiState: StateFlow<BookUiState> = _bookUiState
@@ -29,6 +33,7 @@ class BookViewModel @Inject constructor(
 
     init {
         getBooks()
+        networkStatusHelper.startNetworkCallback()
     }
 
     fun refresh() {
@@ -43,7 +48,7 @@ class BookViewModel @Inject constructor(
         viewModelScope.launch {
             _bookUiState.value = BookUiState.Loading
             delay(2000)
-            val books =  repository.getAllItems()
+            val books =  repository.getAllItems(networkStatus.value)
             _bookUiState.value = if (books.isEmpty()) {
                 BookUiState.Empty("No books found")
             } else {
@@ -54,62 +59,28 @@ class BookViewModel @Inject constructor(
     }
     fun addBook(book: Book) {
         viewModelScope.launch {
-            repository.saveItem(book)
+            repository.saveItem(book,networkStatus.value)
             getBooks()
         }
     }
 
     fun deleteBook(book: Book) {
         viewModelScope.launch {
-            repository.deleteItem(book)
+            repository.deleteItem(book,networkStatus.value)
             getBooks()
         }
     }
 
     fun updateBook(book: Book) {
         viewModelScope.launch {
-            repository.updateItem(book)
+            repository.updateItem(book,networkStatus.value)
             getBooks()
         }
     }
 
-    private fun fetchSampleListOfBook(): List<Book> {
-        return listOf(
-            Book(
-                id = 1,
-                title = "Item 1",
-                author = "Description 1",
-                imageUrl = "https://example.com/image1.jpg"
-            ),
-            Book(
-                id = 2,
-                title = "Item 2",
-                author = "Description 2",
-                imageUrl = "https://example.com/image2.jpg"
-            ),
-            Book(
-                id = 3,
-                title = "Item 3",
-                author = "Description 3",
-                imageUrl = "https://example.com/image3.jpg"
-            ),
-            Book(
-                id = 4,
-                title = "Item 4",
-                author = "Description 4",
-                imageUrl = "https://example.com/image4.jpg"
-            ), Book(
-                id = 5,
-                title = "Item r",
-                author = "Description 4",
-                imageUrl = "https://example.com/image4.jpg"
-            ),
-            Book(
-                id = 67,
-                title = "Itreyt",
-                author = "Description 4",
-                imageUrl = "https://example.com/image4.jpg"
-            )
-        )
+
+    override fun onCleared() {
+        super.onCleared()
+        networkStatusHelper.stopNetworkCallback()
     }
 }
