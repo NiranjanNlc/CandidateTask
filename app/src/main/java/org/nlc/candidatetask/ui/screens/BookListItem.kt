@@ -26,16 +26,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.rememberImagePainter
+import org.nlc.candidatetask.R
 import org.nlc.candidatetask.data.Book
 
 @Composable
-fun ItemListItem(
-    book: Book, onItemClick: (Book) -> Unit, onEditClick: () -> Unit)
-{
-    var showDialog by remember { mutableStateOf(true) }
+fun BookListItem(
+    book: Book,
+    onEditClick: (book: Book) -> Unit,
+    onDeleteClick: (book: Book) -> Unit
+) {
+    var showDialog by remember { mutableStateOf(false) }
 
     if (showDialog) {
         AlertDialog(onDismissRequest = { showDialog = false },
@@ -57,51 +60,82 @@ fun ItemListItem(
 
     Card(modifier = Modifier
         .fillMaxWidth()
-        .clickable { onItemClick(book) }
-        .padding(16.dp))
+        .padding(4.dp))
     {
         Row(
-            modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically
+            modifier = Modifier.padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            book.imageUrl?.let {
+            if (book.imageUrl != null) {
                 Box {
                     Image(
-                        painter = rememberImagePainter(data = it),
+                        painter =  painterResource(id = R.drawable.book),
                         contentDescription = "Item Image",
-                        modifier = Modifier.size(64.dp)
+                        modifier = Modifier
+                            .size(64.dp)
+                            .padding(end = 16.dp)
                     )
                 }
-                Spacer(modifier = Modifier.width(16.dp))
+            } else {
+                Box {
+                    Image(
+                        painter = painterResource(id = R.drawable.book), // Replace `default_image` with your default image resource name
+                        contentDescription = "Default Image",
+                        modifier = Modifier
+                            .size(64.dp)
+                            .padding(end = 16.dp)
+                    )
+                }
             }
             Column(
                 modifier = Modifier.weight(1f)
             ) {
                 Text(
-                    book.title, style = MaterialTheme.typography.bodySmall
+                    book.title, style = MaterialTheme.typography.bodyLarge
                 )
-                book.description?.let {
+                book.author?.let {
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        it, style = MaterialTheme.typography.bodyLarge
+                        it, style = MaterialTheme.typography.bodyMedium
                     )
                 }
             }
-            IconButton(onClick = onEditClick) {
-                Icon(Icons.Filled.Edit, contentDescription = "Edit")
+            IconButton(
+                onClick = { onEditClick(book) },
+                modifier = Modifier.size(40.dp)
+            ) { // Increased icon size
+                Icon(
+                    Icons.Filled.Edit,
+                    contentDescription = "Edit",
+                    modifier = Modifier.size(32.dp)
+                )
             }
-            IconButton(onClick = { showDialog = true }) {
-                Icon(Icons.Filled.Delete, contentDescription = "Delete")
+            Spacer(modifier = Modifier.width(16.dp))
+            IconButton(
+                onClick = { onDeleteClick(book) },
+                modifier = Modifier.size(40.dp)
+            ) { // Increased icon size
+                Icon(
+                    Icons.Filled.Delete,
+                    contentDescription = "Delete",
+                    modifier = Modifier.size(32.dp)
+                )
             }
         }
     }
+
 }
+
 
 @Preview
 @Composable
 fun ItemListItemPreview() {
-    ItemListItem(book = Book(
+    BookListItem(book = Book(
         title = "Item Title",
-        description = "Item Description",
-        imageUrl = "https://www.example.com/image.jpg"
-    ), onItemClick = {}, onEditClick = {})
+        author = "Item Description",
+        imageUrl = null // Replace `null` with your image URL
+    ),
+        onEditClick = {},
+        onDeleteClick = {}
+    )
 }

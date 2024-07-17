@@ -1,5 +1,8 @@
-package org.nlc.candidatetask.data
+package org.nlc.candidatetask.repository
 
+import org.nlc.candidatetask.data.Book
+import org.nlc.candidatetask.data.FirebaseDataSource
+import org.nlc.candidatetask.data.ItemDao
 import javax.inject.Inject
 
 class BookRepository @Inject constructor(

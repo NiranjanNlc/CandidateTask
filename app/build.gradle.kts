@@ -68,6 +68,10 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.room.common)
+    // make room work with hilt
+    implementation ("android.arch.persistence.room:runtime:1.1.1")
+    kapt ("android.arch.persistence.room:compiler:1.1.1")
+
     implementation(libs.firebase.database.ktx)
     implementation(libs.androidx.work.runtime.ktx)
     //firebase
@@ -85,10 +89,10 @@ dependencies {
 
     implementation("com.google.dagger:hilt-android:2.51.1")
     kapt("com.google.dagger:hilt-android-compiler:2.51.1")
-    implementation ("androidx.navigation:navigation-compose:2.4.0-alpha09")
+    implementation ("androidx.navigation:navigation-compose:2.7.7")
     implementation ("androidx.hilt:hilt-navigation-compose:1.0.0-alpha03")
 
-    implementation(libs.androidx.hilt.lifecycle.viewmodel)
+//    implementation(libs.androidx.hilt.lifecycle.viewmodel)
     kapt(libs.androidx.hilt.compiler)
 
     androidTestImplementation(libs.androidx.junit)

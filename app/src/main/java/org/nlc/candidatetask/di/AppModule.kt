@@ -8,7 +8,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import org.nlc.candidatetask.data.BookRepository
+import org.nlc.candidatetask.repository.BookRepository
 import org.nlc.candidatetask.data.AppDatabase
 import org.nlc.candidatetask.data.FirebaseDataSource
 import org.nlc.candidatetask.data.ItemDao
