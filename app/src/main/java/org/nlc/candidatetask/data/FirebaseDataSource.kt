@@ -7,16 +7,21 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class FirebaseDataSource @Inject constructor(
-    database: FirebaseDatabase ) {
+    database: FirebaseDatabase
+) {
 
     private val database = database.reference.child("items")
 
-    suspend fun addItem(book: Book): Boolean = withContext(Dispatchers.IO) {
+    suspend fun addItem(book: Book): String? = withContext(Dispatchers.IO) {
         try {
-            database.push().setValue(book).await()
-            true
+            val key = database.push().key // Generate a new unique key
+            key?.let {
+                book.bookId = it // Set the generated key as the id of the book
+                database.child(it).setValue(book).await()
+                it // Return the key as the result of the function
+            }
         } catch (e: Exception) {
-            false
+            null
         }
     }
 
@@ -27,8 +32,8 @@ class FirebaseDataSource @Inject constructor(
 
     suspend fun updateItem(book: Book): Boolean = withContext(Dispatchers.IO) {
         try {
-            book.id?.let {
-                database.child(it.toString()).setValue(book).await()
+            book.bookId?.let {
+                database.child(it).setValue(book).await()
                 true
             } ?: false
         } catch (e: Exception) {
@@ -45,6 +50,3 @@ class FirebaseDataSource @Inject constructor(
         }
     }
 }
-
-
-

@@ -6,9 +6,12 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -84,15 +87,22 @@ fun BookListScreen(
                     )
                 }
                 is BookUiState.Empty -> {
-//                    EmptyContentScreen(
-//                        message = (bookUiState as BookUiState.Empty).message
-//                    )
+                    EmptyContentScreen(
+                        modifier = Modifier,
+                        title =(bookUiState as BookUiState.Empty).message,
+                        subTitle = "Please add some data and refresh  again",
+                        iconTint = MaterialTheme.colorScheme.primary,
+                        iconImageVector = Icons.Rounded.Search
+                    )
                 }
                 is BookUiState.Error -> {
-//                    ErrorScreenContent(
-//                        message = (bookUiState as BookUiState.Error).message
-//                    )
-                }
+                    ErrorScreenContent(
+                        modifier = Modifier,
+                        title = (bookUiState as BookUiState.Error).message,
+                        subTitle = "Please check your connection or try again",
+                        onClickRetry = { viewModel.refresh()}
+                    )
+                 }
             }
         }
     }
