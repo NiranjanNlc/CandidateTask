@@ -11,6 +11,6 @@ data class Book(
     val author: String=" ",
     val imageUrl: String?=" ",
     var isSynchronized: Boolean = false,
-    val lastModified: Long = System.currentTimeMillis(),
+    var lastModified: Long = System.currentTimeMillis(),
     val isDeleted : Boolean = false
 )

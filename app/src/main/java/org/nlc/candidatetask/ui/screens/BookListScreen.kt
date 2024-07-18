@@ -20,11 +20,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import org.nlc.candidatetask.R
 import org.nlc.candidatetask.data.Book
 import org.nlc.candidatetask.util.BookUiState
@@ -38,7 +42,6 @@ fun BookListScreen(
     viewModel: BookViewModel = hiltViewModel(),
 ) {
     val bookUiState by viewModel.bookUiState.collectAsState()
-    val isRefreshing by viewModel.isRefreshing.collectAsState()
 
     var showAddDiaolog by remember { mutableStateOf(false) }
 
@@ -118,21 +121,41 @@ private fun ListOfBook(
 
     var selectedBook: Book? by remember { mutableStateOf(null) }
 
-    LazyColumn(
-        contentPadding =  PaddingValues(2.dp)
-    ) {
-        items(books) { item ->
-            BookListItem(
-                book = item,
-                onEditClick = {
-                    selectedBook = it
-                    showEditDialog = true
-                },
-                onDeleteClick = {
-                    selectedBook = it
-                    showDeleteDialog = true
-                }
+    val bookList by viewModel.bankAccountDetailsList.collectAsState()
+
+    val isRefreshing by viewModel.isRefreshing.collectAsState()
+
+    SwipeRefresh(
+        state = rememberSwipeRefreshState(isRefreshing),
+        onRefresh = {
+            viewModel.refresh()
+        },
+        indicator = { state, refreshTriggerDistance ->
+            SwipeRefreshIndicator(
+                state = state,
+                refreshTriggerDistance = refreshTriggerDistance,
+                contentColor = MaterialTheme.colorScheme.primary,
+                backgroundColor = MaterialTheme.colorScheme.background
             )
+        }
+    )
+    {
+        LazyColumn(
+            contentPadding = PaddingValues(2.dp)
+        ) {
+            items(bookList) { item ->
+                BookListItem(
+                    book = item,
+                    onEditClick = {
+                        selectedBook = it
+                        showEditDialog = true
+                    },
+                    onDeleteClick = {
+                        selectedBook = it
+                        showDeleteDialog = true
+                    }
+                )
+            }
         }
     }
     if (showEditDialog) {

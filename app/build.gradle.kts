@@ -83,6 +83,9 @@ dependencies {
     testImplementation(libs.mockito.kotlin)
     testImplementation(libs.mockito.inline)
     testImplementation(libs.junit)
+    // Make sure you have the Accompanist library  to swipe refresh
+    implementation("com.google.accompanist:accompanist-swiperefresh:0.19.0")
+
 // power mockito to test firebase 
     testImplementation(libs.powermock)
     testImplementation(libs.powermock.module.junit4)

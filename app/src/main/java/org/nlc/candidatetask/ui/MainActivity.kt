@@ -20,14 +20,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .build()
-
-        val syncWorkRequest = PeriodicWorkRequestBuilder<SyncWorker>(35, TimeUnit.SECONDS)
-            .setConstraints(constraints)
-            .build()
-        WorkManager.getInstance(this).enqueue(syncWorkRequest)
         setContent {
             CandidateTaskTheme {
                 BookListScreen( )
