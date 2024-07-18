@@ -1,8 +1,6 @@
 package org.nlc.candidatetask.ui.viewmodel
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -26,7 +24,7 @@ class BookViewModel @Inject constructor(
 
     val networkStatus = networkStatusHelper.networkStatus
 
-    val bankAccountDetailsList: StateFlow<List<Book>> = repository.books
+    val bookList: StateFlow<List<Book>> = repository.books
 
     private val _bookUiState = MutableStateFlow<BookUiState>(BookUiState.Loading)
     val bookUiState: StateFlow<BookUiState> = _bookUiState
@@ -44,7 +42,13 @@ class BookViewModel @Inject constructor(
         viewModelScope.launch {
             _isRefreshing.emit(true)
              repository.getAllItems(networkStatus.value)
-             delay(1000)
+            if (bookList.value.isEmpty()) {
+                _bookUiState.value = BookUiState.Empty("No books found")
+            }
+            else {
+                _bookUiState.value = BookUiState.Success(bookList.value)
+            }
+            delay(500)
             _isRefreshing.emit(false)
         }
     }

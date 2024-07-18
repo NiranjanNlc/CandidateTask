@@ -20,12 +20,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
@@ -121,7 +119,7 @@ private fun ListOfBook(
 
     var selectedBook: Book? by remember { mutableStateOf(null) }
 
-    val bookList by viewModel.bankAccountDetailsList.collectAsState()
+    val bookList by viewModel.bookList.collectAsState()
 
     val isRefreshing by viewModel.isRefreshing.collectAsState()
 
